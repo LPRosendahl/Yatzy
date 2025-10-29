@@ -19,5 +19,10 @@ public class Die {
 
     public void roll() {
         //TODO: implement roll method.
+        eyes = random.nextInt(6) + 1; //Her får man en terning med 6 øjne
+    }
+
+    public int getEyes() {
+        return eyes;
     }
 }
