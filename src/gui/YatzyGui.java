@@ -246,7 +246,7 @@ public class YatzyGui extends Application {
     // klik-adfærd for scorefelter
     // Denne metode tager ét TextField som parameter (tf) – fx txt3Ens – og kobler “klik-adfærd” på det.
     private void wireLockBehavior(TextField tf) {
-        tf.setEditable(false);
+        tf.setEditable(true);
         tf.setOnMouseClicked(e -> {
             if (locked.contains(tf)) return; // allerede låst
             lockField(tf);
@@ -269,6 +269,9 @@ public class YatzyGui extends Application {
         lblThrowsLeft.setText("Antal kast tilbage: 3");
         btnKast.setDisable(false);
         values.put(txtSum, sumScore());
+        values.put(txtBonus,bonusScore());
+        txtSum.setText(Integer.toString(sumScore()));
+        txtTotal.setText(Integer.toString(totalScore()));
 
         for (CheckBox checkBox : chbHold) {
             checkBox.setSelected(false);
@@ -324,22 +327,56 @@ public class YatzyGui extends Application {
     }
 
     public int sumScore() {
-        int sum = 0;
+        int upperSum = 0;
         TextField[] upperFields = {txt1ere, txt2ere, txt3ere, txt4ere, txt5ere, txt6ere};
 
         for (TextField tf : upperFields) {
             if (locked.contains(tf)) {          // kun felter som er låst
                 String text = tf.getText();
                 if (text != null && !text.isEmpty()) {
-                    sum += Integer.parseInt(text);
+                    upperSum += Integer.parseInt(text);
                 }
             }
         }
-
-        return sum;
+        return upperSum;
     }
 
+    public int bonusScore() {
+        int bonus = 0;
+        if (sumScore() >= 63) {
+            bonus = 50;
+        } else {
+            bonus = 0;
+        }
+        txtBonus.setText(String.valueOf(bonus)); // opdater GUI-feltet
+        return bonus;
+    }
+
+    public int bottumSumScore(){
+
+    int bottumSum = 0;
+    TextField[] buttomFields = {txtEtPar, txtToPar, txt3Ens, txt4Ens, txtLilleStraight, txtStoreStraight, txtFuldtHus, txtChance,txtYatzy};
+
+        for (TextField tf : buttomFields) {
+            if (locked.contains(tf)) {          // kun felter som er låst
+                String text = tf.getText();
+                if (text != null && !text.isEmpty()) {
+                    bottumSum += Integer.parseInt(text);
+                }
+            }
+        }
+        return bottumSum;
+}
+
+    public int totalScore() {
+        int total = 0;
+
+//        sumScore();
+//        bonusScore();
+//        bottumSumScore();
+        total = sumScore() + bonusScore() + bottumSumScore();
 
 
-
+        return total;
+    }
 }
